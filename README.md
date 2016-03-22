@@ -18,6 +18,6 @@ nvm use 5 # or e.g. 5.8 or 5.8.1
 ## Install:
 
 ```sh
-curl -sSL https://raw.githubusercontent.com/brigand/fast-nvm-fish/master/nvm.fish > ~/.config/fish/functions/nvm.sh
+curl -sSL https://raw.githubusercontent.com/brigand/fast-nvm-fish/master/nvm.fish > ~/.config/fish/functions/nvm.fish
 ```
 
