@@ -21,3 +21,10 @@ nvm use 5 # or e.g. 5.8 or 5.8.1
 curl -sSL https://raw.githubusercontent.com/brigand/fast-nvm-fish/master/nvm.fish > ~/.config/fish/functions/nvm.fish
 ```
 
+To make it work on new shells you'll need to set a version in your config.fish.
+
+```sh
+fish use 5
+```
+
+
