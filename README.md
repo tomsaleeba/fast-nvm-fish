@@ -24,7 +24,11 @@ curl -sSL https://raw.githubusercontent.com/brigand/fast-nvm-fish/master/nvm.fis
 To make it work on new shells you'll need to set a version in your config.fish.
 
 ```sh
-fish use 5
+nvm use 5
 ```
 
+The `fish_user_paths` [universal variable](https://fishshell.com/docs/current/tutorial.html#tut_universal) must exist before running `nvm` commands. Run this once in your fish shell:
 
+```sh
+set -U fish_user_paths
+```
