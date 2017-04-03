@@ -21,13 +21,18 @@ function brigand_nvm_fish_find_matching_version --description 'Finds the version
 	set -l brigand_nvm_fish_path ~/.nvm/versions/node
 	set -l target 
 
-    # handle alias in targets
-    if nvm_fish_target_is_alias $argv[1]
-        set target (nvm_fish_target_from_alias $argv[1])
-    else
-        set target $argv[1]
-    end
-
+	# handle alias in targets
+	if nvm_fish_target_is_alias $argv[1]
+		set target (nvm_fish_target_from_alias $argv[1])
+	else
+		# If target is not an alias
+		# and target is a text string ignore it 
+		if test (echo $argv[1] | grep -P '\D')
+			set target (nvm_fish_target_from_alias default)
+		else # target is not an alias and not a string, try to match it next
+			set target $argv[1]
+		end
+	end
 
 	set -l best_match 0 0 0
 	set -l raw_target_parts (echo $target | tr '.' '\n')
