@@ -111,7 +111,7 @@ function nvm-fast
 			if test -e $nvmrc
 				set target_version (cat $nvmrc)
 			else
-			bash -c "source ~/.nvm/nvm.sh; nvm $argv"
+				bash -c "source ~/.nvm/nvm.sh; nvm $argv"
 				return
 			end
 
