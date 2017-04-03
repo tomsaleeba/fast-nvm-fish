@@ -1,3 +1,12 @@
+function brigand_nvm_fish_log
+	# Change to true to debug
+	if false
+		echo fast-nvm-fish: $argv
+	end
+end
+
+brigand_nvm_fish_log 'Sourced'
+
 function nvm_fish_target_is_alias --description 'Checks if the target is an existing alias'
 	set -l target $argv[1]
 	set -l nvm_alias_folder ~/.nvm/alias
@@ -24,10 +33,11 @@ function brigand_nvm_fish_find_matching_version --description 'Finds the version
 	# handle alias in targets
 	if nvm_fish_target_is_alias $argv[1]
 		set target (nvm_fish_target_from_alias $argv[1])
+		brigand_nvm_fish_log "Target from alias" $target
 	else
 		# If target is not an alias
 		# and target is a text string ignore it 
-		if test (echo $argv[1] | grep -P '\D')
+		if test -n (echo $argv[1] | grep -E '\D')
 			set target (nvm_fish_target_from_alias default)
 		else # target is not an alias and not a string, try to match it next
 			set target $argv[1]
@@ -103,6 +113,8 @@ function nvm-fast
 	set -l command $argv[1]
 	set -l target_version ''
 
+	brigand_nvm_fish_log "Command:" $command
+
 	if test $command = 'use'
 
 		set -l nvmrc './.nvmrc'
@@ -114,12 +126,15 @@ function nvm-fast
 				bash -c "source ~/.nvm/nvm.sh; nvm $argv"
 				return
 			end
-
 		else
 			set target_version $argv[2]
 		end
 
+		brigand_nvm_fish_log "Target version:" $target_version
+
 		set -l matched_version (brigand_nvm_fish_find_matching_version $target_version)
+
+		brigand_nvm_fish_log "Matched version:" $matched_version
 
 		if test -z $matched_version
 			echo "No version installed for $target_version, run nvm install $target_version"
@@ -135,10 +150,8 @@ function nvm-fast
 				end
 			end
 			set new_path $brigand_nvm_fish_path/v$matched_version/bin $new_path
-			set -gx fish_user_paths $new_path
+			set -gx fish_user_paths $fish_user_paths $new_path
 		end
-	else
-		bash -c "source ~/.nvm/nvm.sh; nvm $argv"
 	end
 end
 
