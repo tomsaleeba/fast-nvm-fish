@@ -1,19 +1,20 @@
 function nvm_fish_target_is_alias --description 'Checks if the target is an existing alias'
-    set -l target $argv[1]
-    set -l nvm_alias_folder ~/.nvm/alias
-    
-    if contains $target (ls $nvm_alias_folder)
-        true
-    else
-        false
-    end
+	set -l target $argv[1]
+	set -l nvm_alias_folder ~/.nvm/alias
+	set -l nvm_alias_folder_content $nvm_alias_folder/*
+
+	if contains $nvm_alias_folder/$target $nvm_alias_folder_content
+		true
+	else
+		false
+	end
 end
 
 function nvm_fish_target_from_alias --description 'Given an alias, returns the target version'
-    set -l target $argv[1]
-    set -l nvm_alias_folder ~/.nvm/alias
+	set -l target $argv[1]
+	set -l nvm_alias_folder ~/.nvm/alias
 
-    echo (cat $nvm_alias_folder/$target)
+	echo (cat $nvm_alias_folder/$target)
 end
 
 function brigand_nvm_fish_find_matching_version --description 'Finds the version matching the semver string'
@@ -95,26 +96,23 @@ function nvm-fast
 	end
 
 	set -l command $argv[1]
-    set -l target_version ''
+	set -l target_version ''
 
 	if test $command = 'use'
 
-        set -l nvmrc './.nvmrc'
-        # Use .nvmrc through node
-        if test (count $argv) -eq 1
-            echo 'checking for .nvmrc ...'
-            if test -e $nvmrc
-                echo "found version in .nvmrc:" (cat $nvmrc)
-                set target_version (cat $nvmrc)
-            else
-                echo 'no .nvmrc found'
-                bash -c "source ~/.nvm/nvm.sh; nvm $argv"
-                return
-            end
+		set -l nvmrc './.nvmrc'
+		# Use .nvmrc through node
+		if test (count $argv) -eq 1
+			if test -e $nvmrc
+				set target_version (cat $nvmrc)
+			else
+			bash -c "source ~/.nvm/nvm.sh; nvm $argv"
+				return
+			end
 
-        else
-            set target_version $argv[2]
-        end
+		else
+			set target_version $argv[2]
+		end
 
 		set -l matched_version (brigand_nvm_fish_find_matching_version $target_version)
 
