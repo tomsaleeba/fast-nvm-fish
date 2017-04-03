@@ -1,6 +1,39 @@
+function nvm_fish_target_is_alias --description 'Checks if the target is an existing alias'
+	set -l target $argv[1]
+	set -l nvm_alias_folder ~/.nvm/alias
+	set -l nvm_alias_folder_content $nvm_alias_folder/*
+
+	if contains $nvm_alias_folder/$target $nvm_alias_folder_content
+		true
+	else
+		false
+	end
+end
+
+function nvm_fish_target_from_alias --description 'Given an alias, returns the target version'
+	set -l target $argv[1]
+	set -l nvm_alias_folder ~/.nvm/alias
+
+	echo (cat $nvm_alias_folder/$target)
+end
+
 function brigand_nvm_fish_find_matching_version --description 'Finds the version matching the semver string'
 	set -l brigand_nvm_fish_path ~/.nvm/versions/node
-	set -l target $argv[1]
+	set -l target 
+
+	# handle alias in targets
+	if nvm_fish_target_is_alias $argv[1]
+		set target (nvm_fish_target_from_alias $argv[1])
+	else
+		# If target is not an alias
+		# and target is a text string ignore it 
+		if test (echo $argv[1] | grep -P '\D')
+			set target (nvm_fish_target_from_alias default)
+		else # target is not an alias and not a string, try to match it next
+			set target $argv[1]
+		end
+	end
+
 	set -l best_match 0 0 0
 	set -l raw_target_parts (echo $target | tr '.' '\n')
 
@@ -63,14 +96,29 @@ end
 
 function nvm-fast
 	set -l brigand_nvm_fish_path ~/.nvm/versions/node
-	if test (count $argv[1]) -lt 1
+	if test (count $argv) -lt 1
 		echo 'nvm-fast: at least one argument is required'
 	end
 
 	set -l command $argv[1]
+	set -l target_version ''
 
 	if test $command = 'use'
-		set -l target_version $argv[2]
+
+		set -l nvmrc './.nvmrc'
+		# Use .nvmrc through node
+		if test (count $argv) -eq 1
+			if test -e $nvmrc
+				set target_version (cat $nvmrc)
+			else
+				bash -c "source ~/.nvm/nvm.sh; nvm $argv"
+				return
+			end
+
+		else
+			set target_version $argv[2]
+		end
+
 		set -l matched_version (brigand_nvm_fish_find_matching_version $target_version)
 
 		if test -z $matched_version
@@ -87,7 +135,7 @@ function nvm-fast
 				end
 			end
 			set new_path $brigand_nvm_fish_path/v$matched_version/bin $new_path
-			set fish_user_paths $new_path
+			set -gx fish_user_paths $new_path
 		end
 	else
 		bash -c "source ~/.nvm/nvm.sh; nvm $argv"
