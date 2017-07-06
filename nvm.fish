@@ -29,7 +29,7 @@ function nvm-fast
 			set fish_user_paths $new_path
 		end
 	else
-		bash -c "source ~/.nvm/nvm.sh; nvm $argv"
+		bash -c "source ~/.nvm/nvm.sh --no-use; nvm $argv"
 	end
 end
 
