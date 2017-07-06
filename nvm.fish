@@ -23,7 +23,9 @@ function nvm-fast
 					set new_path $new_path "$path_segment"
 				end
 			end
-			set new_path $brigand_nvm_fish_path/v$matched_version/bin $new_path
+			if test $matched_version != 'system'
+				set new_path $brigand_nvm_fish_path/$matched_version/bin $new_path
+			end
 			set fish_user_paths $new_path
 		end
 	else
