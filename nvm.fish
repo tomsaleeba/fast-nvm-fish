@@ -10,7 +10,7 @@ function nvm-fast
 		set -l target_version $argv[2]
 		set -l matched_version (bash -c "source ~/.nvm/nvm.sh --no-use; nvm_version $target_version")
 
-		if test -z $matched_version
+		if test -z $matched_version -o $matched_version = 'N/A'
 			echo "No version installed for $target_version, run nvm install $target_version"
 			echo "Installed versions: "
 			for file in $brigand_nvm_fish_path/v*
