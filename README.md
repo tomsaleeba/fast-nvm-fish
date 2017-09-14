@@ -37,8 +37,8 @@ The `fish_user_paths` [universal variable](https://fishshell.com/docs/current/tu
 set -U fish_user_paths
 ```
 
-To make it work on new shells you'll need to set a version in your config.fish.
+To make it work on new shells you'll need to set a version in `config.fish`.
 
 ```sh
-nvm use 5
+echo 'fish use 7' >> ~/.config/fish/config.fish
 ```
