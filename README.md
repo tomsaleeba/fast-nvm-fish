@@ -40,5 +40,5 @@ set -U fish_user_paths
 To make it work on new shells you'll need to set a version in `config.fish`.
 
 ```sh
-echo 'nvm use 7' >> ~/.config/fish/config.fish
+echo 'nvm use 7.2.1' >> ~/.config/fish/config.fish
 ```
