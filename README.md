@@ -42,3 +42,11 @@ To make it work on new shells you'll need to set a version in `config.fish`.
 ```sh
 echo 'nvm use 7.2.1' >> ~/.config/fish/config.fish
 ```
+
+If you have nvm installed anywhere other than ~/.nvm, set a global
+variable in your `config.fish` file *before* first invoking `nvm use`.
+
+```sh
+set -gx NVM_DIR ~/custom_path/nvm
+nvm use 7.2.1
+```
