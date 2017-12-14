@@ -7,8 +7,21 @@ function nvm-fast
 
 	set -l command $argv[1]
 	if test $command = 'use'
-		set -l target_version $argv[2]
+		set target_version "unknown"
+		if test (count $argv) -eq 1
+			if test -f .nvmrc
+				set target_version (cat .nvmrc)
+			else
+				echo "Error: No version provided and no .nvmrc found"
+				return
+			end
+		else
+			set target_version $argv[2]
+		end
+		set -l target_version $target_version
+
 		set -l matched_version (bash -c "source $NVM_DIR/nvm.sh --no-use; nvm_version $target_version")
+
 		if test -z $matched_version -o $matched_version = 'N/A'
 			echo "No version installed for $target_version, run nvm install $target_version"
 			echo "Installed versions: "
