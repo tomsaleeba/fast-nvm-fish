@@ -17,6 +17,8 @@ nvm use 5 # or e.g. 5.8 or 5.8.1
 
 ## Install:
 
+**Requirements:** you must have Fish 2.6.0 or newer.
+
 First install nvm if you haven't already. You can check the [nvm readme] for a more up to data install command.
 
 [nvm readme]: https://github.com/creationix/nvm/blob/master/README.md#install-script

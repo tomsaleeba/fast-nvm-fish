@@ -41,6 +41,11 @@ function nvm-fast
 end
 
 function nvm
+	switch "$FISH_VERSION"
+		case 2.0.0 2.1.0 2.1.1 2.1.2 2.2.0 2.2b1 2.3.0 2.3.1 2.3b1 2.3b2 2.4.0 2.4b1 2.5.0 2.5b1
+			echo "You need fish 2.6.0 or higher to use fast-nvm-fish." 1>&2
+			return 1
+	end
 	nvm-fast $argv
 end
 
