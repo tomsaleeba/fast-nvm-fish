@@ -1,12 +1,13 @@
 function nvm-fast
 	set -q NVM_DIR ; or set -l NVM_DIR ~/.nvm
 	set -l brigand_nvm_fish_path $NVM_DIR/versions/node
+	
+	set -l nvmcommand $argv[1]
 	if test (count $argv[1]) -lt 1
-		echo 'nvm-fast: at least one argument is required'
+		set nvmcommand '--help'
 	end
 
-	set -l command $argv[1]
-	if test $command = 'use'
+	if test $nvmcommand = 'use'
 		set target_version "unknown"
 		if test (count $argv) -eq 1
 			if test -f .nvmrc
